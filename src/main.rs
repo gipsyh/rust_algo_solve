@@ -34,24 +34,28 @@ macro_rules! read {
 		read![ $( $ty ),* ]
     };
 }
-use ::std::cmp::min;
 fn main() {
     for _ in 0..read!(usize) {
-        let (_, mut k) = read!(usize, usize);
-        let mut add = 0;
-        let mut a = read_vec!(usize);
-        for i in 0..a.len() {
-            let tmp = min(k, a[i]);
-            a[i] -= tmp;
-            k -= tmp;
-            add += tmp;
+        let _ = read!(usize);
+        let a = read_vec!(usize);
+        let mut ans: usize = 0;
+        let mut pre: Vec<usize> = vec![];
+        for x in &a {
+            ans = ans ^ x;
+            pre.push(ans);
         }
-        for i in 0..a.len() {
-            if i != a.len() - 1 {
-                print!("{} ", a[i]);
-            } else {
-                println!("{}", a[i] + add);
+        if ans == 0 {
+            println!("YES");
+            continue;
+        }
+        let mut _ans = "NO";
+        for i in 0..a.len() - 1 {
+            for j in i + 1..a.len() {
+                if pre[i] == pre[j] ^ pre[i] && pre[i] == ans ^ pre[j] {
+                    _ans = "YES";
+                }
             }
         }
+        println!("{}", _ans);
     }
 }
