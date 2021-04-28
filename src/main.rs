@@ -34,41 +34,19 @@ macro_rules! read {
 		read![ $( $ty ),* ]
     };
 }
-use std::collections::BTreeSet;
 fn main() {
-    let _ = read!(usize);
-    let mut a = read_vec!(i32);
-    let mut set = BTreeSet::new();
-    set.insert(0);
-    for x in &a {
-        let mut tmp = BTreeSet::new();
-        for y in set.iter() {
-            tmp.insert(y + x);
-        }
-        for y in tmp.iter() {
-            set.insert(*y);
-        }
-    }
-    let mut sum = 0;
-    for x in &a {
-        sum += x;
-    }
-    if sum % 2 == 0 && set.contains(&(sum / 2)) {
-        println!("1");
-        loop {
-            match a.iter().position(|a| a % 2 != 0) {
-                Some(ans) => {
-                    println!("{}", ans + 1);
-                    break;
-                }
-                None => {
-                    for i in 0..a.len() {
-                        a[i] /= 2;
-                    }
-                }
+    for _ in 0..read!(usize) {
+        let x = read!(u64);
+        if x % 2050 == 0 {
+            let s = (x / 2050).to_string();
+            let v: Vec<u32> = s.chars().map(|c| c.to_digit(10).unwrap()).collect();
+            let mut ans = 0;
+            for x in v {
+                ans += x;
             }
+            println! {"{}", ans};
+        } else {
+            println!("-1");
         }
-    } else {
-        println!("0");
     }
 }
