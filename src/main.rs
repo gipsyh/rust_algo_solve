@@ -1,4 +1,4 @@
-use std::{io, usize};
+use std::{io, ops::Bound, usize};
 
 #[allow(dead_code)]
 fn gets() -> String {
@@ -34,6 +34,9 @@ macro_rules! read {
 		read![ $( $ty ),* ]
     };
 }
+
+
+
 fn main() {
     for _ in 0..read!(usize) {
         let x = read!(u64);
