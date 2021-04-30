@@ -35,18 +35,31 @@ macro_rules! read {
     };
 }
 fn main() {
-    for _ in 0..read!(usize) {
-        let (n, m, d) = read!(i64, i64, i64);
-        let max = n.max(m);
-        let min = n.min(m);
-        if max == min {
-            println!("YES");
-            continue;
+    for _ in 0..read!(i64) {
+        let n = read!(usize);
+        let u = read_vec!(usize);
+        let s = read_vec!(i64);
+        let mut idx: Vec<usize> = (0..n).collect();
+        let mut v: Vec<Vec<usize>> = vec![vec![]; n];
+        let mut ans = vec![0; n];
+        idx.sort_by_key(|a| s[*a] * -1);
+        for x in &idx {
+            v[u[*x] - 1].push(*x);
         }
-        if (max - min - 1) / min + 1 > d {
-            println!("NO");
-        } else {
-            println!("YES");
+        for v in v {
+            let mut tmp = 0;
+            let mut pre: Vec<i64> = vec![];
+            for x in &v {
+                tmp += s[*x];
+                pre.push(tmp);
+            }
+            for i in 0..v.len() {
+                ans[i] += pre[v.len() / (i + 1) * (i + 1) - 1];
+            }
         }
+        for x in ans {
+            print!("{} ", x);
+        }
+        println!();
     }
 }
