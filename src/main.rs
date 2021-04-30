@@ -1,4 +1,4 @@
-use std::{io, usize};
+use std::io;
 
 #[allow(dead_code)]
 fn gets() -> String {
@@ -36,17 +36,17 @@ macro_rules! read {
 }
 fn main() {
     for _ in 0..read!(usize) {
-        let x = read!(u64);
-        if x % 2050 == 0 {
-            let s = (x / 2050).to_string();
-            let v: Vec<u32> = s.chars().map(|c| c.to_digit(10).unwrap()).collect();
-            let mut ans = 0;
-            for x in v {
-                ans += x;
-            }
-            println! {"{}", ans};
+        let (n, m, d) = read!(i64, i64, i64);
+        let max = n.max(m);
+        let min = n.min(m);
+        if max == min {
+            println!("YES");
+            continue;
+        }
+        if (max - min - 1) / min + 1 > d {
+            println!("NO");
         } else {
-            println!("-1");
+            println!("YES");
         }
     }
 }
