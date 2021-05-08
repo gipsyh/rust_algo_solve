@@ -1,19 +1,20 @@
-use std::usize;
-struct STreeNode {
-    l: Option<Box<STreeNode>>,
-    r: Option<Box<STreeNode>>,
-    sum: usize,
+use std::{
+    ops::{Add, AddAssign},
+    usize,
+};
+#[derive(Default)]
+struct STreeNode<T: Default + AddAssign + Add<Output = T> + Copy> {
+    l: Option<Box<STreeNode<T>>>,
+    r: Option<Box<STreeNode<T>>>,
+    sum: T,
 }
 
-impl STreeNode {
-    pub fn new() -> Self {
-        STreeNode {
-            l: None,
-            r: None,
-            sum: 0,
-        }
+impl<T: Default + AddAssign + Add<Output = T> + Copy> STreeNode<T> {
+    // type Output = T;
+    fn new() -> Self {
+        STreeNode::default()
     }
-    pub fn build(&mut self, l: usize, r: usize) {
+    fn build(&mut self, l: usize, r: usize) {
         if l == r {
             return;
         }
@@ -25,7 +26,7 @@ impl STreeNode {
         self.l = Some(ln);
         self.r = Some(rn);
     }
-    pub fn add(&mut self, pos: usize, val: usize, l: usize, r: usize) {
+    fn add(&mut self, pos: usize, val: T, l: usize, r: usize) {
         if l == r {
             self.sum += val;
             return;
@@ -39,12 +40,12 @@ impl STreeNode {
         self.sum = self.l.as_ref().unwrap().sum + self.r.as_ref().unwrap().sum;
     }
 
-    pub fn get(&self, lpos: usize, rpos: usize, l: usize, r: usize) -> usize {
+    fn get(&self, lpos: usize, rpos: usize, l: usize, r: usize) -> T {
         if lpos <= l && r <= rpos {
             return self.sum;
         }
         let mid = (l + r) / 2;
-        let mut sum = 0;
+        let mut sum = T::default();
         if lpos <= mid {
             sum += self.l.as_ref().unwrap().get(lpos, rpos, l, mid);
         }
@@ -55,13 +56,13 @@ impl STreeNode {
     }
 }
 
-pub struct STree {
-    root: Option<Box<STreeNode>>,
+pub struct STree<T: Default + AddAssign + Add<Output = T> + Copy> {
+    root: Option<Box<STreeNode<T>>>,
     l: usize,
     r: usize,
 }
 
-impl STree {
+impl<T: Default + AddAssign + Add<Output = T> + Copy> STree<T> {
     pub fn new(l: usize, r: usize) -> Self {
         let mut root = Box::new(STreeNode::new());
         root.build(l, r);
@@ -71,7 +72,7 @@ impl STree {
             r,
         }
     }
-    pub fn add(&mut self, pos: usize, val: usize) -> Result<(), ()> {
+    pub fn add(&mut self, pos: usize, val: T) -> Result<(), ()> {
         if pos < self.l || pos > self.r {
             return Err(());
         }
@@ -81,7 +82,7 @@ impl STree {
             .add(pos, val, self.l, self.r);
         Ok(())
     }
-    pub fn get(&self, lpos: usize, rpos: usize) -> Result<usize, ()> {
+    pub fn get(&self, lpos: usize, rpos: usize) -> Result<T, ()> {
         if lpos < self.l || lpos > self.r || rpos < self.l || rpos > self.r {
             return Err(());
         }
@@ -91,10 +92,12 @@ impl STree {
 
 #[test]
 fn test1() -> Result<(), ()> {
+    let l = 1;
+    let r = 100;
     let mut stree = STree::new(1, 100);
-    stree.add(1, 55555)?;
-    stree.add(2, 44444)?;
-    stree.add(3, 1)?;
-    println!("{}", stree.get(1, 100).unwrap());
+    for i in l..r + 1 {
+        stree.add(i, 1)?;
+    }
+    assert_eq!(r - l + 1, stree.get(l, r).unwrap());
     Ok(())
 }
