@@ -34,6 +34,7 @@ macro_rules! read {
 		read![ $( $ty ),* ]
     };
 }
+
 fn main() -> Result<(), ()> {
     let mut stree = template::segtree::STree::new(1, 100);
     stree.add(1, 55555)?;
