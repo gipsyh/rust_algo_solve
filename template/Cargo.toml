@@ -1,13 +1,9 @@
 [package]
-authors = ["bytedance"]
-edition = "2018"
-name = "rust_algo_solve"
+name = "template"
 version = "0.1.0"
+authors = ["GipsyU <su_yuheng@foxmail.com>"]
+edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-template = { path = "template" }
-
-[workspace]
-members = ["template"]
