@@ -1,4 +1,4 @@
-use std::{io, usize};
+use std::io;
 
 #[allow(dead_code)]
 fn gets() -> String {
@@ -34,19 +34,10 @@ macro_rules! read {
 		read![ $( $ty ),* ]
     };
 }
-fn main() {
-    for _ in 0..read!(usize) {
-        let x = read!(u64);
-        if x % 2050 == 0 {
-            let s = (x / 2050).to_string();
-            let v: Vec<u32> = s.chars().map(|c| c.to_digit(10).unwrap()).collect();
-            let mut ans = 0;
-            for x in v {
-                ans += x;
-            }
-            println! {"{}", ans};
-        } else {
-            println!("-1");
-        }
-    }
+fn main() -> Result<(), ()> {
+    let mut stree = template::segtree::STree::new(1, 100);
+    stree.add(1, 55555)?;
+    stree.add(2, 44444)?;
+    println!("{}", stree.get(1, 100).unwrap());
+    Ok(())
 }
