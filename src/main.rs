@@ -35,13 +35,4 @@ macro_rules! read {
     };
 }
 
-fn main() -> Result<(), ()> {
-    let l = 1;
-    let r = 100;
-    let mut stree = template::segtree::STree::new(1, 100);
-    for i in l..r + 1 {
-        stree.add(i, 1)?;
-    }
-    assert_eq!(r - l + 1, stree.get(l, r).unwrap());
-    Ok(())
-}
+fn main() {}
